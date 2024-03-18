@@ -727,6 +727,10 @@ stream.write_all(response.as_bytes()).unwrap();
 <a name="commit-4"></a>
 ## Commit 4 Reflection notes
 
+ketika kita mengakses 127.0.0.1/sleep, respons dari server akan tertunda selama 10 detik sebelum mengirimkan kembali respons "hello.html". Ini terjadi karena kita menggunakan ```thread::sleep(Duration::from_secs(10));``` untuk menunda eksekusi selama 10 detik. Ketika banyak pengguna mencoba mengakses halaman tersebut secara bersamaan, mereka akan mengalami penundaan yang sama, karena setiap permintaan akan menunggu 10 detik sebelum respons diberikan.
+
+Hal ini dapat digunakan untuk mensimulasikan situasi di mana server membutuhkan waktu yang lama untuk memproses permintaan, misalnya, ketika melakukan pengolahan data yang kompleks atau mengakses sumber daya eksternal yang memerlukan waktu.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -736,6 +740,16 @@ stream.write_all(response.as_bytes()).unwrap();
 <a name="commit-5"></a>
 ## Commit 5 Reflection notes
 
+ThreadPool dalam program ini terdiri dari sekelompok thread yang siap menangani tugas-tugas yang masuk. Ketika program menerima tugas baru, ia menugaskan salah satu dari thread dalam pool untuk menangani tugas tersebut, dan thread tersebut akan memproses tugas tersebut. Sementara itu, thread-thread lainnya dalam pool tetap tersedia untuk menangani tugas-tugas lain yang masuk sementara thread pertama sedang memproses tugasnya. Ketika thread pertama selesai memproses tugasnya, thread tersebut kembali ke pool thread yang idle, siap untuk menangani tugas baru. Dengan menggunakan ThreadPool, kita dapat memproses koneksi secara bersamaan, meningkatkan throughput dari server kita.
+
+ThreadPool dalam program ini terdiri dari dua komponen utama: ```ThreadPool``` dan ```Worker```.
+
+- ```ThreadPool``` memiliki vektor workers yang berisi thread-thread yang ada dalam pool, serta sender yang merupakan channel untuk mengirim tugas ke thread-thread tersebut.
+- ```Worker``` adalah struktur yang mewakili masing-masing thread dalam pool. Setiap worker memiliki id unik dan sebuah thread yang sedang berjalan.
+
+Ketika ThreadPool dibuat dengan memanggil ```ThreadPool::new(size)```, akan dibuat sejumlah size worker dan sebuah channel. Ketika fungsi execute dipanggil dengan fungsi yang akan dieksekusi, tugas tersebut dikirimkan melalui channel ke salah satu worker dalam pool. Worker yang tersedia akan menerima tugas tersebut dari channel dan menjalankannya dalam thread-nya sendiri.
+
+ThreadPool digunakan dalam program ini untuk mengatur proses eksekusi tugas-tugas yang masuk secara bersamaan dengan menggunakan thread-thread yang ada dalam pool. Ini membantu meningkatkan kinerja server dengan memungkinkan proses koneksi yang lebih banyak dapat ditangani secara bersamaan.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "advprog-modul6"
+name = "hello"
 version = "0.1.0"
