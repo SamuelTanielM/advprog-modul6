@@ -649,7 +649,106 @@ Content-Length adalah header HTTP yang menyatakan panjang konten dalam byte dari
 
 <hr>
 
+<hr>
 
+<!-- ABOUT THE PROJECT -->
+<a name="commit-3"></a>
+## Commit 3 Reflection notes
+
+Pada tahap ketiga akan dibuat Handling requests to / differently from other requests yaitu jika mengakses alamat web yang salah akan memunculkan laman 404
+caranya disini kita bagi menjadi dua kondisi laman benar dan laman salah menggunakan if else, mengikuti langkah pengerjaan kita ubah untuk disesuaikan, kita dapatkan
+```rust
+if let Some(request_line) = http_request.first() {
+    if request_line == &"GET / HTTP/1.1" {
+        let status_line = "HTTP/1.1 200 OK";
+        let contents = fs::read_to_string("hello.html").unwrap();
+        let length = contents.len();
+
+        let response = format!(
+            "{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}",
+            status_line = status_line,
+            length = length,
+            contents = contents
+        );
+
+        stream.write_all(response.as_bytes()).unwrap();
+    } else {
+        let status_line = "HTTP/1.1 404 NOT FOUND";
+        let contents = fs::read_to_string("404.html").unwrap();
+        let length = contents.len();
+        
+        let response = format!(
+        "{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}"
+        );
+        
+        stream.write_all(response.as_bytes()).unwrap();
+    }
+} else {
+    // Handle case where http_request is empty
+}
+```
+
+disini kita juga membuat 404.html sehingga dimunculkan
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Hello!</title>
+</head>
+<body>
+<h1>Oops!</h1>
+<p>Sorry, I don't know what you're asking for.</p>
+</body>
+</html>
+```
+
+kemudian kita refactoring hal ini supaya membuatnya lebih mudah untuk melihat perbedaan antara dua kasus tersebut, dan ini berarti kita hanya perlu memperbarui satu tempat dalam kode jika kita ingin mengubah cara membaca file dan menulis responsnya. Perilaku kode dnegan if else akan sama dengan yang ada di Listing sekarang.
+```rust
+if let Some(request_line) = http_request.first() {
+    let (status_line, filename) = if request_line == "GET / HTTP/1.1" {
+        ("HTTP/1.1 200 OK", "hello.html")
+    } else {
+        ("HTTP/1.1 404 NOT FOUND", "404.html")
+    };
+
+    let contents = fs::read_to_string(filename).unwrap();
+    let length = contents.len();
+
+    let response = format!(
+        "{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}",
+        status_line = status_line,
+        length = length,
+        contents = contents
+    );
+
+    stream.write_all(response.as_bytes()).unwrap();
+} else {
+    // Handle case where http_request is empty
+}
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<hr>
+
+<!-- ABOUT THE PROJECT -->
+<a name="commit-4"></a>
+## Commit 4 Reflection notes
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<hr>
+
+<!-- ABOUT THE PROJECT -->
+<a name="commit-5"></a>
+## Commit 5 Reflection notes
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<hr>
 
 </details>
 
