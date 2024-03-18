@@ -592,10 +592,63 @@ Strategi yang dilakukan untuk mmengoptimize kode apliksai setelah mengalaisis ha
 
 Kita buat git repository dan pastikan sudah memiliki library rust, buat new project rust dengan cargo, kemudian mencoba program dengan tcplistener untuk menjalankan server dan mengaksesnya dari browser menggambarkan interaksi dasar antara server dan klien.
 Kemudian saya memahami penanganan permintaan dalam web server dengan metode handle_connection, yang bertanggung jawab untuk memproses permintaan masuk. Ini menggunakan pustaka I/O dan jaringan Rust, menunjukkan kemampuan Rust dalam menangani operasi sistem tingkat rendah secara efisien.
+```rust
+use std::{ //untuk mengimpor library
+ io::{prelude::*, BufReader},
+ net::{TcpListener, TcpStream},
+};
+```
+
+```rust
+fn main() {
+  let listener = TcpListener::bind("127.0.0.1:7878").unwrap(); //membuat TcpListener baru yang terikat ke alamat IP dan port 
+  for stream in listener.incoming() { let stream = stream.unwrap(); // berjalan untuk setiap koneksi yang masuk ke server. listener.incoming() mengembalikan iterator yang menghasilkan TcpStream
+    handle_connection(stream); }
+}
+```
+
+```rust
+fn handle_connection(mut stream: TcpStream) { let buf_reader = BufReader::new(&mut stream);
+  let http_request: Vec<_> = buf_reader //membaca setiap baris dari TcpStream, mengumpulkannya menjadi vektor, dan menghentikan pembacaan saat menemui baris kosong.
+          .lines() 
+          .map(|result| result.unwrap())
+          .take_while(|line| !line.is_empty()) .collect();
+  println!("Request: {:#?}", http_request);
+}
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <hr>
+
+<!-- ABOUT THE PROJECT -->
+<a name="commit-2"></a>
+## Commit 2 Reflection notes
+
+```rust
+fn handle_connection(mut stream: TcpStream) {
+  let buf_reader = BufReader::new(&mut stream); let http_request: Vec<_> = buf_reader
+          .lines() .map(|result| result.unwrap()) .take_while(|line| !line.is_empty())
+          .collect();
+  let status_line = "HTTP/1.1 200 OK"; 
+  let contents = fs::read_to_string("hello.html").unwrap(); //membaca isi dari file "hello.html" ke dalam string contents menggunakan fs::read_to_string(). Fungsi ini membuka file, membacanya, dan mengembalikan string berisi isi file. .unwrap() digunakan untuk menangani kemungkinan error dengan cara yang kasar (biasa digunakan untuk kasus seperti ini dalam kode contoh).
+  let length = contents.len();
+  let response =
+          format!("{status_line}\r\nContent-Length:
+{length}\r\n\r\n{contents}");//pembentukan respons HTTP yang lengkap. Status line, panjang konten, dan isi konten digabungkan menjadi satu string menggunakan fungsi format!()
+  stream.write_all(response.as_bytes()).unwrap();//Akhirnya, respons yang telah dibentuk di atas dikirimkan ke klien melalui koneksi stream
+}
+```
+
+Content-Length adalah header HTTP yang menyatakan panjang konten dalam byte dari respons yang dikirim oleh server kepada klien
+
+![Commit 2 screen capture](/assets/images/commit2.png)
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<hr>
+
 
 
 </details>
