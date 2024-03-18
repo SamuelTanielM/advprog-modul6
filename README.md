@@ -565,20 +565,20 @@ Strategi yang dilakukan untuk mmengoptimize kode apliksai setelah mengalaisis ha
     <a href="#commit-1">Commit 1 Reflection notes</a>
   </li>
   <li>
-    <a href="#cookie-request">fungsi dari CookieRequest dan mengapa instance CookieRequest perlu untuk dibagikan ke semua komponen di aplikasi Flutter</a>
+    <a href="#commit-2">Commit 2 Reflection notes</a>
   </li>
   <li>
-    <a href="#mekanisme-fetch">mekanisme pengambilan data dari JSON hingga dapat ditampilkan pada Flutter</a>
+    <a href="#commit-3">Commit 3 Reflection notes</a>
   </li>
   <li>
-    <a href="#mekanisme-auth">mekanisme autentikasi dari input data akun pada Flutter ke Django hingga selesainya proses autentikasi oleh Django dan tampilnya menu pada Flutter.</a>
+    <a href="#commit-4">Commit 4 Reflection notes</a>
   </li>
   <li>
-    <a href="#widget-dipakai">widget yang kamu dipakai pada tugas ini</a>
+    <a href="#commit-5">Commit 5 Reflection notes</a>
   </li>
 
   <li>
-    <a href="#checklist9">implementasi checklist</a>
+    <a href="#commit-bonus">Commit Bonus Reflection notes</a>
   </li>
 
 </ol>
