@@ -755,6 +755,22 @@ ThreadPool digunakan dalam program ini untuk mengatur proses eksekusi tugas-tuga
 
 <hr>
 
+<!-- ABOUT THE PROJECT -->
+<a name="commit-bonus"></a>
+## Commit Bonus Reflection notes
+
+Perbedaan antara metode ```new``` dan ```build``` dalam konteks pembuatan thread pool adalah sebagai berikut:
+- Metode ```new```:
+  - Metode ini tidak mengembalikan hasil apapun jika pembuatan thread pool berhasil atau gagal. Pengguna harus memeriksa secara manual apakah thread pool berhasil dibuat dengan memanggil metode new dan kemudian melakukan pemeriksaan terhadap thread pool yang dikembalikan.
+- Metode ```build```:
+  - Metode ini memberikan penanganan error yang lebih baik dengan menggunakan tipe khusus PoolCreationError untuk menandai kesalahan yang terkait dengan pembuatan thread pool. Atau unrecoverable error.
+
+Pilihan antara metode new dan build tergantung pada preferensi dan kebutuhan pengguna. Metode new lebih sederhana dan mudah digunakan, sementara metode build lebih aman dalam hal penanganan kesalahan.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<hr>
+
 </details>
 
 <hr>
