@@ -658,7 +658,6 @@ Content-Length adalah header HTTP yang menyatakan panjang konten dalam byte dari
 Pada tahap ketiga akan dibuat Handling requests to / differently from other requests yaitu jika mengakses alamat web yang salah akan memunculkan laman 404
 caranya disini kita bagi menjadi dua kondisi laman benar dan laman salah menggunakan if else, mengikuti langkah pengerjaan kita ubah untuk disesuaikan, kita dapatkan
 ```rust
-if let Some(request_line) = http_request.first() {
     if request_line == &"GET / HTTP/1.1" {
         let status_line = "HTTP/1.1 200 OK";
         let contents = fs::read_to_string("hello.html").unwrap();
@@ -683,9 +682,6 @@ if let Some(request_line) = http_request.first() {
         
         stream.write_all(response.as_bytes()).unwrap();
     }
-} else {
-    // Handle case where http_request is empty
-}
 ```
 
 disini kita juga membuat 404.html sehingga dimunculkan
@@ -705,27 +701,19 @@ disini kita juga membuat 404.html sehingga dimunculkan
 
 kemudian kita refactoring hal ini supaya membuatnya lebih mudah untuk melihat perbedaan antara dua kasus tersebut, dan ini berarti kita hanya perlu memperbarui satu tempat dalam kode jika kita ingin mengubah cara membaca file dan menulis responsnya. Perilaku kode dnegan if else akan sama dengan yang ada di Listing sekarang.
 ```rust
-if let Some(request_line) = http_request.first() {
-    let (status_line, filename) = if request_line == "GET / HTTP/1.1" {
-        ("HTTP/1.1 200 OK", "hello.html")
-    } else {
-        ("HTTP/1.1 404 NOT FOUND", "404.html")
-    };
-
-    let contents = fs::read_to_string(filename).unwrap();
-    let length = contents.len();
-
-    let response = format!(
-        "{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}",
-        status_line = status_line,
-        length = length,
-        contents = contents
-    );
-
-    stream.write_all(response.as_bytes()).unwrap();
+let (status_line, filename) = if request_line == "GET / HTTP/1.1" {
+("HTTP/1.1 200 OK", "hello.html")
 } else {
-    // Handle case where http_request is empty
-}
+("HTTP/1.1 404 NOT FOUND", "404.html")
+};
+
+let contents = fs::read_to_string(filename).unwrap();
+let length = contents.len();
+
+let response =
+format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+
+stream.write_all(response.as_bytes()).unwrap();
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
