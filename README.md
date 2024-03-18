@@ -695,6 +695,7 @@ disini kita juga membuat 404.html sehingga dimunculkan
 <body>
 <h1>Oops!</h1>
 <p>Sorry, I don't know what you're asking for.</p>
+<p>Rust is running from Samuel's machine.</p>
 </body>
 </html>
 ```
@@ -715,6 +716,8 @@ format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
 
 stream.write_all(response.as_bytes()).unwrap();
 ```
+
+![Commit 3 screen capture](/assets/images/commit3.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
